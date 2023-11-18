@@ -22,7 +22,7 @@ const HomeScreenMain = ({ navigation }: any) => {
                 <ScrollView style={styles.ScrollViewContainer}>
                     <Header />
                     <View style={{
-                        marginBottom: 20
+                        marginBottom: 30
                     }}>
                         <Text style={styles.TextTitle}>Good morning</Text>
                         <Text style={styles.TextSubTitle}>Grab your first coffee in the morning</Text>
@@ -31,7 +31,8 @@ const HomeScreenMain = ({ navigation }: any) => {
                     <Text style={{
                         color: "#fff",
                         fontSize: 18,
-                        marginBottom: 20
+                        marginBottom: 20,
+                        fontWeight: "900"
                     }}>Coffee</Text>
                     <FlatList
                         data={coffeeList}
@@ -82,7 +83,9 @@ const HomeScreenMain = ({ navigation }: any) => {
                     <Text style={{
                         color: "#fff",
                         fontSize: 18,
-                        marginBottom: 20
+                        marginTop: 20,
+                        marginBottom: 20,
+                        fontWeight: "900"
                     }}>Beans</Text>
                     <FlatList
                         data={coffeeList}
@@ -162,7 +165,14 @@ const styles = StyleSheet.create({
         marginVertical: "auto",
         marginHorizontal: 10,
         padding: 10,
-        borderRadius: 20
+        borderRadius: 20,
+        shadowOpacity: 0.08,
+        shadowOffset: {
+            width: 0,
+            height: 20
+        },
+        shadowRadius: 10,
+        elevation:3,
     },
     FlatListImage: {
         width: "100%",
@@ -178,8 +188,8 @@ const styles = StyleSheet.create({
     },
     TextSubTitle: {
         fontSize: 15,
-        fontWeight: "400",
-        color: "white"
+        fontWeight: "500",
+        color: "#dedede"
     },
     ScrollViewContainer: {
         flex: 1,
