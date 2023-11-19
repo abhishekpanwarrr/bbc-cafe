@@ -6,26 +6,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCircleChevronLeft, faMinusCircle, faMugHot, faPlusCircle, faStar } from '@fortawesome/free-solid-svg-icons'
 import AddToCart from '../../components/AddToCart'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
-interface Data {
+export interface DataProps {
     name: string
     image: ImageProps
     description: string
     ingredients: string
-    price: []
-    size: []
+    price: number
 }
 const DetailScreen = ({ navigation, route }: any) => {
     const tabBarHeight = useBottomTabBarHeight()
-    const [coffeeCount, setCoffeeCount] = useState(1)
-    const [data, setData] = useState<Data>({} as Data)
+    const [data, setData] = useState<DataProps>({} as DataProps)
     const routeName = route.params.name
+    const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
         const filtered = coffeeList.filter(coffee => coffee.name === routeName)[0]
         setData(filtered)
     }, [])
-    console.log("data", data);
-
     return (
         <SafeAreaView style={{
             flex: 1,
@@ -34,7 +31,6 @@ const DetailScreen = ({ navigation, route }: any) => {
                 padding: 10,
                 position: "relative"
             }}>
-                {/* image container */}
                 <View>
                     <Image source={data.image} style={styles.ImageBackground} />
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.BackButton}>
@@ -56,8 +52,41 @@ const DetailScreen = ({ navigation, route }: any) => {
                             color: "#fff"
                         }}>4.5</Text>
                     </View>
+                    <View style={{
+                        position: 'absolute',
+                        width: 120,
+                        bottom: -15,
+                        left: "35%",
+                        right: "50%",
+                        justifyContent: 'center',
+                        alignItems: "center",
+                        marginRight: 10,
+                        flexDirection: 'row',
+                        gap: 15,
+                        backgroundColor: '#fafafa',
+                        borderRadius: 10,
+                        paddingHorizontal: 10
+                    }}>
+                        <TouchableOpacity onPress={() => {
+                            if (quantity == 1) return
+                            setQuantity(prev => prev - 1)
+                        }}>
+                            <FontAwesomeIcon icon={faMinusCircle} size={25} color='' />
+                        </TouchableOpacity>
+                        <Text style={{
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                            marginVertical: 5
+                        }}>{quantity}</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                if (quantity == 10) return
+                                setQuantity(prev => prev + 1)
+                            }}>
+                            <FontAwesomeIcon icon={faPlusCircle} size={25} color='#451718' />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                {/* Coffee name and price container */}
                 <View style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -73,10 +102,9 @@ const DetailScreen = ({ navigation, route }: any) => {
                             color: "#000",
                             fontSize: 24,
                             fontWeight: "700"
-                        }}>₹ {data?.price[0]}</Text>
+                        }}>₹ {data?.price}</Text>
                     }
                 </View>
-                {/* Description */}
                 <Text style={{
                     color: "#512626",
                     fontSize: 14,
@@ -87,76 +115,18 @@ const DetailScreen = ({ navigation, route }: any) => {
                 <Text style={{
                     color: "#b6b6b6"
                 }}>{data?.description}</Text>
-                {/* Coffee size */}
-                <Text style={{
-                    color: "#512626",
-                    fontSize: 17,
-                    fontWeight: "800",
-                    marginTop: 16,
-                    marginBottom: 8
-                }}>Coffee size</Text>
-
                 <View style={{
                     flex: 1,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center'
                 }}>
-                    <View style={{
-                        flexDirection: "row",
-                        gap: 20
-                    }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: "#ff9029",
-                            padding: 15,
-                            borderRadius: 25
-                        }}>
-                            <FontAwesomeIcon icon={faMugHot} size={20} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            backgroundColor: "#f2cbb3",
-                            padding: 15,
-                            borderRadius: 25
-                        }}>
-                            <FontAwesomeIcon icon={faMugHot} size={25} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{
-                            backgroundColor: "#f2cbb3",
-                            padding: 15,
-                            borderRadius: 25
-                        }}>
-                            <FontAwesomeIcon icon={faMugHot} size={30} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: "center",
-                        marginRight: 10
-                    }}>
-                        <TouchableOpacity onPress={() => {
-                            if (coffeeCount == 1) return
-                            setCoffeeCount(prev => prev - 1)
-                        }}>
-                            <FontAwesomeIcon icon={faMinusCircle} size={18} color='' />
-                        </TouchableOpacity>
-                        <Text style={{
-                            fontSize: 18,
-                            marginVertical: 5
-                        }}>{coffeeCount}</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                if (coffeeCount == 10) return
-                                setCoffeeCount(prev => prev + 1)
-                            }}>
-                            <FontAwesomeIcon icon={faPlusCircle} size={18} color='#451718' />
-                        </TouchableOpacity>
-                    </View>
                 </View>
-                <AddToCart />
                 <View style={{
                     marginBottom: tabBarHeight
                 }} />
             </ScrollView>
+            <AddToCart data={data} quantity={quantity} tabBarHeight={tabBarHeight} />
         </SafeAreaView>
     )
 }

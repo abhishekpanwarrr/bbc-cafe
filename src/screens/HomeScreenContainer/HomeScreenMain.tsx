@@ -13,7 +13,8 @@ const HomeScreenMain = ({ navigation }: any) => {
         <SafeAreaView style={{
             flex: 1
         }}>
-            <ImageBackground source={require("../../assets/background.jpg")}
+            <View
+                // source={require("../../assets/background.jpg")}
                 style={{
                     flex: 1,
                     height: Dimensions.get("screen").height
@@ -29,14 +30,14 @@ const HomeScreenMain = ({ navigation }: any) => {
                     </View>
                     {/* Coffee List */}
                     <Text style={{
-                        color: "#fff",
+                        color: "#000",
                         fontSize: 18,
                         marginBottom: 20,
                         fontWeight: "900"
                     }}>Coffee</Text>
                     <FlatList
                         data={coffeeList}
-                        keyExtractor={item => item?.name}
+                        keyExtractor={item => item?.id.toString()}
                         horizontal
                         initialNumToRender={3}
                         showsHorizontalScrollIndicator={false}
@@ -67,7 +68,7 @@ const HomeScreenMain = ({ navigation }: any) => {
                                         color: "#000",
                                         fontSize: 20,
                                         fontWeight: "700"
-                                    }}>₹ {item?.price[0]}</Text>
+                                    }}>₹ {item?.price}</Text>
                                     <TouchableOpacity onPress={() => { }} style={{
                                         backgroundColor: "#ff9029",
                                         padding: 10,
@@ -81,7 +82,7 @@ const HomeScreenMain = ({ navigation }: any) => {
                     />
                     {/* Beans List */}
                     <Text style={{
-                        color: "#fff",
+                        color: "#000",
                         fontSize: 18,
                         marginTop: 20,
                         marginBottom: 20,
@@ -89,7 +90,7 @@ const HomeScreenMain = ({ navigation }: any) => {
                     }}>Beans</Text>
                     <FlatList
                         data={coffeeList}
-                        keyExtractor={item => item?.name}
+                        keyExtractor={item => item?.id.toString()}
                         horizontal
                         initialNumToRender={3}
                         showsHorizontalScrollIndicator={false}
@@ -120,7 +121,7 @@ const HomeScreenMain = ({ navigation }: any) => {
                                         color: "#000",
                                         fontSize: 20,
                                         fontWeight: "700"
-                                    }}>₹ {item?.price[0]}</Text>
+                                    }}>₹ {item?.price}</Text>
                                     <TouchableOpacity onPress={() => { }} style={{
                                         backgroundColor: "#ff9029",
                                         padding: 10,
@@ -136,7 +137,7 @@ const HomeScreenMain = ({ navigation }: any) => {
                         paddingBottom: tabBarHeight
                     }} />
                 </ScrollView>
-            </ImageBackground>
+            </View>
         </SafeAreaView>
     )
 }
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
             height: 20
         },
         shadowRadius: 10,
-        elevation:3,
+        elevation: 3,
     },
     FlatListImage: {
         width: "100%",
@@ -184,12 +185,12 @@ const styles = StyleSheet.create({
     TextTitle: {
         fontSize: 30,
         fontWeight: "600",
-        color: "white"
+        color: "#000"
     },
     TextSubTitle: {
         fontSize: 15,
         fontWeight: "500",
-        color: "#dedede"
+        color: "#000"
     },
     ScrollViewContainer: {
         flex: 1,
