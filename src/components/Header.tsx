@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginVertical: 10,
+        backgroundColor:"#fafafa"
     },
     avatar: {
         width: 40,
