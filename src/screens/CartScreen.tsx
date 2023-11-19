@@ -10,16 +10,18 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  ImageProps
+  ImageProps,
+  Button
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 import { coffeeList } from '../data/coffee';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { selectCartTotalPrice } from '../app/totalCartPrice';
+import { addToCart, emptyCart } from '../app/cartSlice';
 
 interface CartItem {
   id?: number
@@ -36,6 +38,7 @@ const CartScreen = ({ navigation }: any) => {
   const [coffeeCount, setCoffeeCount] = useState(1)
   const [listData, setListData] = useState<Array<CartItem>>([]);
   const totalCartPrice = useSelector(selectCartTotalPrice);
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setListData(
@@ -49,6 +52,7 @@ const CartScreen = ({ navigation }: any) => {
       }))
     );
   }, [cart]);
+
   const closeRow = (rowMap: any, rowKey: any) => {
     if (rowMap[rowKey]) {
       rowMap[rowKey].closeRow();
@@ -100,7 +104,7 @@ const CartScreen = ({ navigation }: any) => {
         removeRow();
       });
     }
-
+    
     return (
       <Animated.View
         style={[styles.rowFront, { height: rowHeightAnimatedValue }]}>
@@ -132,21 +136,14 @@ const CartScreen = ({ navigation }: any) => {
               alignItems: "center",
               marginRight: 10
             }}>
-              <TouchableOpacity onPress={() => {
-                if (coffeeCount == 1) return
-                setCoffeeCount(prev => prev - 1)
-              }}>
+              <TouchableOpacity onPress={() => {}} >
                 <FontAwesomeIcon icon={faMinusCircle} size={18} color='' />
               </TouchableOpacity>
               <Text style={{
                 fontSize: 18,
                 marginVertical: 5
               }}>{data.item.quantity}</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  if (coffeeCount == 10) return
-                  setCoffeeCount(prev => prev + 1)
-                }}>
+              <TouchableOpacity onPress={() => {}}>
                 <FontAwesomeIcon icon={faPlusCircle} size={18} color='#451718' />
               </TouchableOpacity>
             </View>
@@ -274,6 +271,8 @@ const CartScreen = ({ navigation }: any) => {
     );
   };
 
+  const handleCartEmpty = () => dispatch(emptyCart("empty"))
+
   return (
     <SafeAreaView style={[styles.container, { marginBottom: tabBarHeight }]}>
       {cart.length > 0 ? <>
@@ -281,7 +280,20 @@ const CartScreen = ({ navigation }: any) => {
           color: "#000", textAlign: 'center', fontSize: 18,
           fontWeight: "800", marginVertical: 20
         }}>Cart</Text>
-          
+        <TouchableOpacity
+          onPress={handleCartEmpty}
+          style={{
+            position: "absolute",
+            right: 20,
+            top: 40,
+            backgroundColor: "#ff9029",
+            padding: 3,
+            borderRadius: 15
+          }}>
+          <FontAwesomeIcon icon={faClose} size={25} color='#fff' />
+        </TouchableOpacity>
+
+
         <SwipeListView
           data={listData}
           renderItem={renderItem}
@@ -299,18 +311,22 @@ const CartScreen = ({ navigation }: any) => {
           onLeftActionStatusChange={onLeftActionStatusChange}
           onRightActionStatusChange={onRightActionStatusChange}
         />
-        <TouchableOpacity style={{
+        <TouchableOpacity 
+        style={{
           position: 'absolute',
           bottom: -tabBarHeight + 5,
           left: 0,
           right: 0,
           backgroundColor: '#000',
           height: 60,
-          justifyContent: 'center',
+          justifyContent: "space-between",
           alignItems: 'center',
           width: Dimensions.get("window").width - 30,
           marginHorizontal: 15,
-          borderRadius: 20
+          borderRadius: 20,
+          flexDirection: 'row',
+          paddingHorizontal: 30,
+          marginBottom: 5
         }}
           disabled={totalCartPrice <= 0}
           onPress={() => { }}
@@ -319,7 +335,12 @@ const CartScreen = ({ navigation }: any) => {
             color: "#fff",
             fontSize: 18,
             fontWeight: "600"
-          }}>₹ {totalCartPrice} Checkout</Text>
+          }}>₹ {totalCartPrice}</Text>
+          <Text style={{
+            color: "#fff",
+            fontSize: 18,
+            fontWeight: "600"
+          }}>Checkout</Text>
         </TouchableOpacity>
       </> : <View style={{
         flex: 1,
