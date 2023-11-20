@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert, ScrollView } from 'react-native'
 import React, { FC, useState } from 'react'
 import { AuthProps, User } from '../screens/RegisterScreen'
 import { areAllValuesFilled } from '../utils/utils';
@@ -8,15 +8,15 @@ const initialUser: User = {
     email: "",
     password: ""
 };
-const storeData = async (value:object) => {
+const storeData = async (value: object) => {
     try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('bbc_user', jsonValue);
-    } catch (e:any) {
-      // saving error
-      Alert.alert("error in saving user", e)
+        const jsonValue = JSON.stringify(value);
+        await AsyncStorage.setItem('bbc_user', jsonValue);
+    } catch (e: any) {
+        // saving error
+        Alert.alert("error in saving user", e)
     }
-  };
+};
 
 const Login: FC<AuthProps> = ({ setAction, setIsUser }) => {
     const [user, setUser] = useState<User>(initialUser)
@@ -63,7 +63,7 @@ const Login: FC<AuthProps> = ({ setAction, setIsUser }) => {
         }
     };
     return (
-        <View>
+        <ScrollView>
             <Text style={{
                 textAlign: 'center',
                 marginVertical: 20,
@@ -122,7 +122,7 @@ const Login: FC<AuthProps> = ({ setAction, setIsUser }) => {
                     justifyContent: 'center'
                 }}> Sign up</Text></TouchableOpacity></Text>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 

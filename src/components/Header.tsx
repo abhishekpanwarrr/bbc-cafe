@@ -5,7 +5,6 @@ const Header = () => {
     const navigation = useNavigation()
     return (
         <View style={styles.Container}>
-            {/* <FontAwesomeIcon icon={faBars} size={25} color='#ff9029' /> */}
             <View />
             <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 <Image source={require("../assets/avatar.png")}
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginVertical: 10,
-        backgroundColor:"#fafafa"
     },
     avatar: {
         width: 40,
