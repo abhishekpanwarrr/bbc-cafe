@@ -1,6 +1,6 @@
 export const coffeeList = [
     {
-        id: 1,
+        id: "1",
         name: "Espresso coffee",
         ingredients: "Without milk",
         price: 60,
@@ -8,7 +8,7 @@ export const coffeeList = [
         image: require("../assets/espresso.jpg")
     },
     {
-        id: 2,
+        id: "2",
         name: "Cappuccino coffee",
         ingredients: "With milk",
         price: 90,
@@ -16,7 +16,7 @@ export const coffeeList = [
         image: require("../assets/cappucchino.jpg")
     },
     {
-        id: 3,
+        id: "3",
         name: "Black coffee",
         ingredients: "With water",
         price: 100,

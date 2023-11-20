@@ -11,13 +11,17 @@ export interface CartItem {
   price: number;
   quantity: number;
 }
-
+interface FavouriteList {
+  id: string
+}
 export interface CartState {
   cart: CartItem[];
+  favourite: FavouriteList[]
 }
 
 const initialState: CartState = {
   cart: [],
+  favourite: []
 };
 
 export const cartSlice = createSlice({
@@ -36,11 +40,28 @@ export const cartSlice = createSlice({
     },
     emptyCart: (state, action) => {
       state.cart = []
+    },
+    addToFavourite: (state, action) => {
+      const id = action.payload.id;
+
+      if (state.favourite.some(item => item.id === id)) {
+        state.favourite = state.favourite.filter(item => item.id !== id);
+      } else {
+        console.log("false");
+        state.favourite.push(action.payload);
+      }
+    },
+    removeFromFavourite: (state, action) => {
+      const id = action.payload
+      if (state.favourite.some(item => item.id === id)) {
+        console.log("state",state.favourite.length);
+        state.favourite = state.favourite.filter(item => item.id !== id);
+      }
     }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addToCart, emptyCart } = cartSlice.actions;
+export const { addToCart, emptyCart, addToFavourite, removeFromFavourite } = cartSlice.actions;
 
 export default cartSlice.reducer;

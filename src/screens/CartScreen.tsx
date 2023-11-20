@@ -35,6 +35,7 @@ interface CartItem {
 const CartScreen = ({ navigation }: any) => {
   const { cart } = useSelector((state: RootState) => state.cart)
   const tabBarHeight = useBottomTabBarHeight()
+  
   const [coffeeCount, setCoffeeCount] = useState(1)
   const [listData, setListData] = useState<Array<CartItem>>([]);
   const totalCartPrice = useSelector(selectCartTotalPrice);
