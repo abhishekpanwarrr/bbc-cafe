@@ -1,6 +1,6 @@
 import { faClose, faHeart, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -15,19 +15,14 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { coffeeList } from '../data/coffee';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../app/store';
+import { removeFromFavourite } from '../app/cartSlice';
 
 const FavouriteScreen = () => {
   const tabBarHeight = useBottomTabBarHeight()
-  const [listData, setListData] = useState(
-    coffeeList.map((NotificationItem, index) => ({
-      key: `${index}`,
-      title: NotificationItem.name,
-      details: NotificationItem.ingredients,
-      image: NotificationItem.image,
-      price: NotificationItem.price,
-      size: NotificationItem.size,
-    })),
-  );
+  const [listData, setListData] = useState([]);
+  const dispatch = useDispatch()
 
   const closeRow = (rowMap: any, rowKey: any) => {
     if (rowMap[rowKey]) {
@@ -62,6 +57,22 @@ const FavouriteScreen = () => {
   const onLeftAction = (rowKey: any) => {
     console.log('onLeftAction', rowKey);
   };
+  const favourite = useSelector((state: RootState) => state.cart.favourite)
+  console.log("favourite", favourite);
+
+  useEffect(() => {
+    if (favourite) {
+      setListData(favourite.map((NotificationItem, index) => ({
+        key: `${index}`,
+        title: NotificationItem.name,
+        details: NotificationItem.ingredients,
+        image: NotificationItem.image,
+        price: NotificationItem.price,
+        size: NotificationItem.size,
+        id: NotificationItem.id
+      })))
+    }
+  }, [favourite])
 
   const VisibleItem = (props: any) => {
     const {
@@ -80,7 +91,11 @@ const FavouriteScreen = () => {
         removeRow();
       });
     }
+    const handleFavourite = (id: string) => {
+      console.log("idddd", id);
 
+      dispatch(removeFromFavourite(id))
+    }
     return (
       <Animated.View
         style={[styles.rowFront, { height: rowHeightAnimatedValue }]}>
@@ -104,7 +119,8 @@ const FavouriteScreen = () => {
               <Text style={{ color: "gray", fontSize: 12 }}>{data.item.details}</Text>
               <Text style={{ color: "#ff9029", fontSize: 16, fontWeight: "bold", marginTop: 10 }}>₹ {data.item.price}</Text>
             </View>
-            <TouchableOpacity onPress={() => { }} style={{
+
+            <TouchableOpacity onPress={() => handleFavourite(data.item.id)} style={{
               marginRight: 10
             }}>
               <FontAwesomeIcon

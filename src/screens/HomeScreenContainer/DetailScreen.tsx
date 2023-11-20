@@ -3,10 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { coffeeList } from '../../data/coffee'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCircleChevronLeft, faMinusCircle, faMugHot, faPlusCircle, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faCircleChevronLeft, faHeart, faMinusCircle, faPlusCircle, faStar } from '@fortawesome/free-solid-svg-icons'
 import AddToCart from '../../components/AddToCart'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToFavourite } from '../../app/cartSlice'
+import { RootState } from '../../app/store'
+
 export interface DataProps {
+    id?: string
     name: string
     image: ImageProps
     description: string
@@ -15,14 +20,23 @@ export interface DataProps {
 }
 const DetailScreen = ({ navigation, route }: any) => {
     const tabBarHeight = useBottomTabBarHeight()
+    const favourite = useSelector((state: RootState) => state.cart.favourite)
     const [data, setData] = useState<DataProps>({} as DataProps)
     const routeName = route.params.name
     const [quantity, setQuantity] = useState(1)
+    const dispatch = useDispatch()
+    const isFavourite = favourite.some(item => item.id === data.id)
 
     useEffect(() => {
         const filtered = coffeeList.filter(coffee => coffee.name === routeName)[0]
-        setData(filtered)
+        setData(filtered);
     }, [])
+
+    const handleFavourite = (data: DataProps) => {
+        dispatch(addToFavourite(data))
+    }
+    console.log("isFavourite", isFavourite);
+
     return (
         <SafeAreaView style={{
             flex: 1,
@@ -35,6 +49,11 @@ const DetailScreen = ({ navigation, route }: any) => {
                     <Image source={data.image} style={styles.ImageBackground} />
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.BackButton}>
                         <FontAwesomeIcon icon={faCircleChevronLeft} color='#b7a99d' size={25} />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => handleFavourite(data)}
+                        style={styles.FavouriteButton}>
+                        <FontAwesomeIcon icon={faHeart} size={25} color={isFavourite ? "red" : "gray"} />
                     </TouchableOpacity>
                     <View style={{
                         position: "absolute",
@@ -149,6 +168,11 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 20,
         left: 20
+    },
+    FavouriteButton: {
+        position: "absolute",
+        top: 20,
+        right: 20
     },
     ImageBackground: {
         width: "100%",
