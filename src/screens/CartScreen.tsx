@@ -11,17 +11,16 @@ import {
   Image,
   Dimensions,
   ImageProps,
-  Button
 } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-import { coffeeList } from '../data/coffee';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { selectCartTotalPrice } from '../app/totalCartPrice';
-import { addToCart, emptyCart } from '../app/cartSlice';
+import { emptyCart } from '../app/cartSlice';
+import LottieView from 'lottie-react-native';
 
 interface CartItem {
   id?: number
@@ -35,8 +34,7 @@ interface CartItem {
 const CartScreen = ({ navigation }: any) => {
   const { cart } = useSelector((state: RootState) => state.cart)
   const tabBarHeight = useBottomTabBarHeight()
-  
-  const [coffeeCount, setCoffeeCount] = useState(1)
+
   const [listData, setListData] = useState<Array<CartItem>>([]);
   const totalCartPrice = useSelector(selectCartTotalPrice);
   const dispatch = useDispatch()
@@ -105,7 +103,7 @@ const CartScreen = ({ navigation }: any) => {
         removeRow();
       });
     }
-    
+
     return (
       <Animated.View
         style={[styles.rowFront, { height: rowHeightAnimatedValue }]}>
@@ -137,14 +135,14 @@ const CartScreen = ({ navigation }: any) => {
               alignItems: "center",
               marginRight: 10
             }}>
-              <TouchableOpacity onPress={() => {}} >
+              <TouchableOpacity onPress={() => { }} >
                 <FontAwesomeIcon icon={faMinusCircle} size={18} color='' />
               </TouchableOpacity>
               <Text style={{
                 fontSize: 18,
                 marginVertical: 5
               }}>{data.item.quantity}</Text>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => { }}>
                 <FontAwesomeIcon icon={faPlusCircle} size={18} color='#451718' />
               </TouchableOpacity>
             </View>
@@ -276,11 +274,11 @@ const CartScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={[styles.container, { marginBottom: tabBarHeight }]}>
+      <Text style={{
+        color: "#000", textAlign: 'center', fontSize: 18,
+        fontWeight: "800", marginVertical: 20
+      }}>Cart</Text>
       {cart.length > 0 ? <>
-        <Text style={{
-          color: "#000", textAlign: 'center', fontSize: 18,
-          fontWeight: "800", marginVertical: 20
-        }}>Cart</Text>
         <TouchableOpacity
           onPress={handleCartEmpty}
           style={{
@@ -312,23 +310,23 @@ const CartScreen = ({ navigation }: any) => {
           onLeftActionStatusChange={onLeftActionStatusChange}
           onRightActionStatusChange={onRightActionStatusChange}
         />
-        <TouchableOpacity 
-        style={{
-          position: 'absolute',
-          bottom: -tabBarHeight + 5,
-          left: 0,
-          right: 0,
-          backgroundColor: '#000',
-          height: 60,
-          justifyContent: "space-between",
-          alignItems: 'center',
-          width: Dimensions.get("window").width - 30,
-          marginHorizontal: 15,
-          borderRadius: 20,
-          flexDirection: 'row',
-          paddingHorizontal: 30,
-          marginBottom: 5
-        }}
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            bottom: -tabBarHeight + 5,
+            left: 0,
+            right: 0,
+            backgroundColor: '#000',
+            height: 60,
+            justifyContent: "space-between",
+            alignItems: 'center',
+            width: Dimensions.get("window").width - 30,
+            marginHorizontal: 15,
+            borderRadius: 20,
+            flexDirection: 'row',
+            paddingHorizontal: 30,
+            marginBottom: 5
+          }}
           disabled={totalCartPrice <= 0}
           onPress={() => { }}
         >
@@ -348,30 +346,11 @@ const CartScreen = ({ navigation }: any) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-        <View style={{
-          flexDirection: 'row',
-          gap: 20
-        }}>
-          <FontAwesomeIcon icon={faCircleXmark} size={28} color='#ff9029' />
-          <Text style={{
-            fontSize: 28,
-            fontWeight: "bold",
-            color: "#000"
-          }}>No item in cart</Text>
-        </View>
-        <TouchableOpacity style={{
-          marginVertical: 20,
-          backgroundColor: "#ff9029",
-          paddingHorizontal: 30,
-          paddingVertical: 15,
-          borderRadius: 10
-        }} onPress={() => navigation.navigate("HomeScreenMain")}>
-          <Text style={{
-            fontSize: 18,
-            color: "#fff",
-            fontWeight: "700"
-          }}>Home</Text>
-        </TouchableOpacity>
+
+        <LottieView source={require('../assets/lottie/cart.json')} autoPlay loop style={{
+          width: 250,
+          height: 250
+        }} />
       </View>}
     </SafeAreaView>
   );

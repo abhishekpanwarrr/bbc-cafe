@@ -18,6 +18,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { removeFromFavourite } from '../app/cartSlice';
+import LottieView from 'lottie-react-native';
 
 const FavouriteScreen = () => {
   const tabBarHeight = useBottomTabBarHeight()
@@ -248,24 +249,35 @@ const FavouriteScreen = () => {
         color: "#000", textAlign: 'center', fontSize: 18,
         fontWeight: "800", marginVertical: 20
       }}>Favourite List</Text>
+      {listData.length > 0 ? <>
 
-      <SwipeListView
-        data={listData}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        leftOpenValue={75}
-        rightOpenValue={-150}
-        disableRightSwipe
-        onRowDidOpen={onRowDidOpen}
-        leftActivationValue={100}
-        rightActivationValue={-200}
-        leftActionValue={0}
-        rightActionValue={-500}
-        onLeftAction={onLeftAction}
-        onRightAction={onRightAction}
-        onLeftActionStatusChange={onLeftActionStatusChange}
-        onRightActionStatusChange={onRightActionStatusChange}
-      />
+        <SwipeListView
+          data={listData}
+          renderItem={renderItem}
+          renderHiddenItem={renderHiddenItem}
+          leftOpenValue={75}
+          rightOpenValue={-150}
+          disableRightSwipe
+          onRowDidOpen={onRowDidOpen}
+          leftActivationValue={100}
+          rightActivationValue={-200}
+          leftActionValue={0}
+          rightActionValue={-500}
+          onLeftAction={onLeftAction}
+          onRightAction={onRightAction}
+          onLeftActionStatusChange={onLeftActionStatusChange}
+          onRightActionStatusChange={onRightActionStatusChange}
+        />
+      </> : <View style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <LottieView style={{
+          width: 250,
+          height: 250
+        }} source={require("../assets/lottie/favorite.json")} autoPlay loop />
+      </View>}
     </SafeAreaView>
   );
 };

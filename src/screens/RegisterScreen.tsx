@@ -25,7 +25,7 @@ const initialUser: User = {
 const RegisterScreen: FC<AuthProps> = ({ setAction }) => {
     const [user, setUser] = useState<User>(initialUser);
 
-    
+
 
     const handleInputChange = (key: keyof User, value: string) => {
         setUser((prevUser) => ({
@@ -150,7 +150,7 @@ const RegisterScreen: FC<AuthProps> = ({ setAction }) => {
                         textAlign: "center",
                         fontSize: 16
                     }}>Already have an account? <TouchableOpacity
-                        onPress={() => setAction("register")}
+                        onPress={() => setAction("")}
                     ><Text style={{
                         textAlign: "center",
                         fontSize: 16,

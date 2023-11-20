@@ -54,7 +54,6 @@ const ProfileScreen = ({ navigation }: any) => {
     getData()
   }, [isUser])
 
-  console.log("isuserAdmin", user?.isAdmin);
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('bbc_user');
@@ -114,7 +113,7 @@ const ProfileScreen = ({ navigation }: any) => {
                   borderRightColor: '#dddddd',
                   borderRightWidth: 1
                 }]}>
-                  <Title>₹140.50</Title>
+                  <Title>₹ 140.50</Title>
                   <Caption>Wallet</Caption>
                 </View>
                 <View style={styles.infoBox}>
@@ -168,9 +167,9 @@ const ProfileScreen = ({ navigation }: any) => {
                 </TouchableRipple>
               </View>
             </View>
-          ) : <View>
+          ) : <>
             {action ? <RegisterScreen setAction={setAction} /> : <Login setAction={setAction} setIsUser={setIsUser} />}
-          </View>}
+          </>}
       </ScrollView>
     </SafeAreaView>
   );
