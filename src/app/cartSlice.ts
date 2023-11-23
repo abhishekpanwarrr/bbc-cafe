@@ -3,9 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { ImageProps } from 'react-native'; // Make sure to import ImageProps from the correct path
 
 export interface CartItem {
-  id: string;
+  _id: string;
   name: string;
-  image: ImageProps;
+  imagelink_square: ImageProps;
   description: string;
   ingredients: string;
   price: number;
@@ -30,7 +30,7 @@ export const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<CartItem>) => {
       const newItem = action.payload;
-      const existingItem = state.cart.find((item) => item.id === newItem.id);
+      const existingItem = state.cart.find((item) => item._id === newItem._id);
 
       if (existingItem) {
         existingItem.quantity += action.payload.quantity;

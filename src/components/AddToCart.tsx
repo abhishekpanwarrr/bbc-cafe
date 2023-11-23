@@ -9,14 +9,15 @@ import { useNavigation } from '@react-navigation/native'
 
 interface AddToCartProps {
     data: DataProps
-    tabBarHeight: any
     quantity: number
 }
-const AddToCart: FC<AddToCartProps> = ({ data, tabBarHeight, quantity }) => {
+const AddToCart: FC<AddToCartProps> = ({ data, quantity }) => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const handleAddToCart = () => {
         try {
+            console.log(" ...data, quantity", { ...data, quantity });
+
             dispatch(addToCart({ ...data, quantity }));
             Alert.alert("Added in cart");
             navigation.goBack();
