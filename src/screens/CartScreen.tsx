@@ -27,11 +27,11 @@ interface CartItem {
   key: string
   title: string
   details: string
-  image: ImageProps
+  imagelink_square: ImageProps
   price: number
   quantity: number
 }
-const CartScreen = ({ navigation }: any) => {
+const CartScreen = () => {
   const { cart } = useSelector((state: RootState) => state.cart)
   const tabBarHeight = useBottomTabBarHeight()
 
@@ -45,7 +45,7 @@ const CartScreen = ({ navigation }: any) => {
         key: `${index}`,
         title: cartItem.name,
         details: cartItem.ingredients,
-        image: cartItem.image,
+        imagelink_square: cartItem.imagelink_square,
         price: cartItem.price,
         quantity: cartItem.quantity
       }))
@@ -103,6 +103,7 @@ const CartScreen = ({ navigation }: any) => {
         removeRow();
       });
     }
+console.log("data.item",data.item);
 
     return (
       <Animated.View
@@ -119,7 +120,9 @@ const CartScreen = ({ navigation }: any) => {
           }}>
             {/* Image */}
             <View>
-              <Image source={data.item.image} style={styles.Image} />
+              <Image source={{
+                uri:data.item.imagelink_square
+              }} style={styles.Image} />
             </View>
             {/* Text */}
             <View style={{
@@ -127,7 +130,7 @@ const CartScreen = ({ navigation }: any) => {
             }}>
               <Text style={{ color: "#000", fontWeight: "bold", fontSize: 18 }}>{data.item.title}</Text>
               <Text style={{ color: "gray", fontSize: 12 }}>{data.item.details}</Text>
-              <Text style={{ color: "#ff9029", fontSize: 16, fontWeight: "bold", marginTop: 10 }}>₹ {data.item.price}</Text>
+              <Text style={{ color: "#ff9029", fontSize: 16, fontWeight: "bold", marginTop: 10 }}>₹ {data.item.price.split(",")[0]}</Text>
             </View>
             {/* Quantity */}
             <View style={{

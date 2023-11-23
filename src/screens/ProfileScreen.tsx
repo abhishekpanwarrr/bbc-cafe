@@ -61,6 +61,7 @@ const ProfileScreen = ({ navigation }: any) => {
     } catch (e) {
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={{
@@ -123,7 +124,7 @@ const ProfileScreen = ({ navigation }: any) => {
               </View>
 
               <View style={styles.menuWrapper}>
-                {user?.isAdmin && <TouchableRipple onPress={() => { }}>
+                {user?.isAdmin && <TouchableRipple onPress={() => navigation.navigate("Store")}>
                   <View style={styles.menuItem}>
                     <FontAwesomeIcon color="#FF6347" size={20} icon={faStoreAlt} />
                     <Text style={styles.menuItemText}>Your Store</Text>

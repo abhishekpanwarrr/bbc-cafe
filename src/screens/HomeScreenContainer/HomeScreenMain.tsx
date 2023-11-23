@@ -1,20 +1,35 @@
-import { Dimensions, FlatList, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Alert, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPlus, faStar } from '@fortawesome/free-solid-svg-icons'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { coffeeList } from '../../data/coffee'
+import { Coffee } from '../StoreScreens/AddCoffeeScreen'
 
 const HomeScreenMain = ({ navigation }: any) => {
     const tabBarHeight = useBottomTabBarHeight()
+    const [coffeeList, setCoffeeList] = useState<Array<Coffee>>([])
+    useEffect(() => {
+        const getAllCoffee = async () => {
+            try {
+                const response = await fetch("http://localhost:9000/api/v1/coffee/all", {
+                    method: "GET"
+                })
+                const data = await response.json();
+                setCoffeeList(data)
+            } catch (error) {
+                console.log("error", error);
+                Alert.alert("Something went wrong. Please try again later")
+            }
+        }
+        getAllCoffee()
+    }, [])
     return (
         <SafeAreaView style={{
             flex: 1
         }}>
             <View
-                // source={require("../../assets/background.jpg")}
                 style={{
                     flex: 1,
                     height: Dimensions.get("screen").height
@@ -35,51 +50,57 @@ const HomeScreenMain = ({ navigation }: any) => {
                         marginBottom: 20,
                         fontWeight: "900"
                     }}>Coffee</Text>
-                    <FlatList
-                        data={coffeeList}
-                        keyExtractor={item => item?.id.toString()}
-                        horizontal
-                        initialNumToRender={3}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity style={styles.CoffeeContainer} onPress={() => navigation.navigate("DetailScreen", { name: item.name })}>
-                                <Image source={item?.image} style={styles.FlatListImage} />
-                                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
-                                    <View style={{ marginVertical: 5, flex: 1 }}>
-                                        <Text numberOfLines={1} ellipsizeMode='tail' style={styles.CoffeeName}>{item?.name}</Text>
-                                        <Text numberOfLines={2} ellipsizeMode='tail' style={styles.CoffeeIngredient}>{item?.ingredients}</Text>
+                    {
+                        coffeeList.length <= 0 ? <Text style={{ color: "#000" }}>
+                            No coffee found
+                        </Text> : <FlatList
+                            data={coffeeList}
+                            keyExtractor={item => item?._id.toString()}
+                            horizontal
+                            initialNumToRender={3}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity style={styles.CoffeeContainer} onPress={() => navigation.navigate("DetailScreen", { id: item._id })}>
+                                    <Image source={{
+                                        uri: item?.imagelink_square
+                                    }} style={styles.FlatListImage} />
+                                    <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+                                        <View style={{ marginVertical: 5, flex: 1 }}>
+                                            <Text numberOfLines={1} ellipsizeMode='tail' style={styles.CoffeeName}>{item?.name}</Text>
+                                            <Text numberOfLines={2} ellipsizeMode='tail' style={styles.CoffeeIngredient}>{item?.ingredients}</Text>
+                                        </View>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            gap: 4,
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <FontAwesomeIcon icon={faStar} size={15} color='#ff9029' />
+                                            <Text style={styles.Ratings}>4.5</Text>
+                                        </View>
                                     </View>
                                     <View style={{
                                         flexDirection: 'row',
-                                        gap: 4,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center'
                                     }}>
-                                        <FontAwesomeIcon icon={faStar} size={15} color='#ff9029' />
-                                        <Text style={styles.Ratings}>4.5</Text>
+                                        <Text style={{
+                                            color: "#000",
+                                            fontSize: 20,
+                                            fontWeight: "700"
+                                        }}>₹ {item?.price?.split(",")?.[0]}</Text>
+                                        <TouchableOpacity onPress={() => { }} style={{
+                                            backgroundColor: "#ff9029",
+                                            padding: 10,
+                                            borderRadius: 10
+                                        }}>
+                                            <FontAwesomeIcon icon={faPlus} color='#fff' size={18} />
+                                        </TouchableOpacity>
                                     </View>
-                                </View>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        color: "#000",
-                                        fontSize: 20,
-                                        fontWeight: "700"
-                                    }}>₹ {item?.price}</Text>
-                                    <TouchableOpacity onPress={() => { }} style={{
-                                        backgroundColor: "#ff9029",
-                                        padding: 10,
-                                        borderRadius: 10
-                                    }}>
-                                        <FontAwesomeIcon icon={faPlus} color='#fff' size={18} />
-                                    </TouchableOpacity>
-                                </View>
-                            </TouchableOpacity>
-                        )}
-                    />
+                                </TouchableOpacity>
+                            )}
+                        />
+                    }
                     {/* Beans List */}
                     <Text style={{
                         color: "#000",
@@ -88,51 +109,57 @@ const HomeScreenMain = ({ navigation }: any) => {
                         marginBottom: 20,
                         fontWeight: "900"
                     }}>Beans</Text>
-                    <FlatList
-                        data={coffeeList}
-                        keyExtractor={item => item?.id.toString()}
-                        horizontal
-                        initialNumToRender={3}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => (
-                            <View style={styles.CoffeeContainer}>
-                                <Image source={item?.image} style={styles.FlatListImage} />
-                                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
-                                    <View style={{ marginVertical: 5, flex: 1 }}>
-                                        <Text numberOfLines={1} ellipsizeMode='tail' style={styles.CoffeeName}>{item?.name}</Text>
-                                        <Text numberOfLines={2} ellipsizeMode='tail' style={styles.CoffeeIngredient}>{item?.ingredients}</Text>
+                    {
+                        coffeeList.length <= 0 ? <Text style={{ color: "#000" }}>
+                            No beans found
+                        </Text> : <FlatList
+                            data={coffeeList}
+                            keyExtractor={item => item?._id.toString()}
+                            horizontal
+                            initialNumToRender={3}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity style={styles.CoffeeContainer} onPress={() => navigation.navigate("DetailScreen", { id: item._id })}>
+                                    <Image source={{
+                                        uri: item?.imagelink_square
+                                    }} style={styles.FlatListImage} />
+                                    <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+                                        <View style={{ marginVertical: 5, flex: 1 }}>
+                                            <Text numberOfLines={1} ellipsizeMode='tail' style={styles.CoffeeName}>{item?.name}</Text>
+                                            <Text numberOfLines={2} ellipsizeMode='tail' style={styles.CoffeeIngredient}>{item?.ingredients}</Text>
+                                        </View>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            gap: 4,
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}>
+                                            <FontAwesomeIcon icon={faStar} size={15} color='#ff9029' />
+                                            <Text style={styles.Ratings}>4.5</Text>
+                                        </View>
                                     </View>
                                     <View style={{
                                         flexDirection: 'row',
-                                        gap: 4,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center'
                                     }}>
-                                        <FontAwesomeIcon icon={faStar} size={15} color='#ff9029' />
-                                        <Text style={styles.Ratings}>4.5</Text>
+                                        <Text style={{
+                                            color: "#000",
+                                            fontSize: 20,
+                                            fontWeight: "700"
+                                        }}>₹ {item?.price?.split(",")?.[0]}</Text>
+                                        <TouchableOpacity onPress={() => { }} style={{
+                                            backgroundColor: "#ff9029",
+                                            padding: 10,
+                                            borderRadius: 10
+                                        }}>
+                                            <FontAwesomeIcon icon={faPlus} color='#fff' size={18} />
+                                        </TouchableOpacity>
                                     </View>
-                                </View>
-                                <View style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center'
-                                }}>
-                                    <Text style={{
-                                        color: "#000",
-                                        fontSize: 20,
-                                        fontWeight: "700"
-                                    }}>₹ {item?.price}</Text>
-                                    <TouchableOpacity onPress={() => { }} style={{
-                                        backgroundColor: "#ff9029",
-                                        padding: 10,
-                                        borderRadius: 10
-                                    }}>
-                                        <FontAwesomeIcon icon={faPlus} color='#fff' size={18} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        )}
-                    />
+                                </TouchableOpacity>
+                            )}
+                        />
+                    }
                     <View style={{
                         paddingBottom: tabBarHeight
                     }} />
@@ -177,8 +204,8 @@ const styles = StyleSheet.create({
     },
     FlatListImage: {
         width: "100%",
-        height: 100,
-        resizeMode: 'cover',
+        height: 130,
+        resizeMode: "cover",
         borderRadius: 10,
         marginBottom: 5
     },
