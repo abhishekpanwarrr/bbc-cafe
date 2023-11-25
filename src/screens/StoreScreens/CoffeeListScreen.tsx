@@ -11,7 +11,7 @@ const CoffeeListScreen = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          'http://localhost:9000/api/v1/coffee/all',
+          'https://bbc-cafe-backend.vercel.app/api/v1/coffee/all',
           {
             method: 'GET',
           },

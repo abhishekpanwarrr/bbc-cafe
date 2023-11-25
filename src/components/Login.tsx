@@ -39,7 +39,7 @@ const Login: FC<AuthProps> = ({setAction}) => {
         };
 
         const response = await fetch(
-          'http://localhost:9000/api/v1/user/login',
+          'https://bbc-cafe-backend.vercel.app/api/v1/user/login',
           {
             method: 'POST',
             headers: {

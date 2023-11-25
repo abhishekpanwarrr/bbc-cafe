@@ -39,13 +39,16 @@ const CartScreen = () => {
   const handleCartEmpty = () => dispatch(emptyCart());
 
   const onCheckout = async () => {
-    const response = await fetch('http://localhost:9000/api/v1/stripe/intent', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'https://bbc-cafe-backend.vercel.app/api/v1/stripe/intent',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({amount: totalCartPrice * 100}),
       },
-      body: JSON.stringify({amount: totalCartPrice * 100}),
-    });
+    );
     const data = await response.json();
 
     if (data.error) {
@@ -55,7 +58,7 @@ const CartScreen = () => {
 
     const initResponse = await initPaymentSheet({
       merchantDisplayName: 'BBC Cafe',
-      paymentIntentClientSecret: data.paymentIntent
+      paymentIntentClientSecret: data.paymentIntent,
     });
     if (initResponse.error) {
       console.log(initResponse.error);

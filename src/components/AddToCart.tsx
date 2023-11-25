@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native'
 
 interface AddToCartProps {
     data: DataProps
-    quantity: string
+    quantity: number
 }
 const AddToCart: FC<AddToCartProps> = ({ data, quantity }) => {
     const dispatch = useDispatch()

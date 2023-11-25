@@ -22,6 +22,7 @@ import AddToCart from '../../components/AddToCart';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {useDispatch} from 'react-redux';
 import {addToFavourite} from '../../app/cartSlice';
+import LottieView from 'lottie-react-native';
 
 export interface DataProps {
   _id: string;
@@ -47,7 +48,7 @@ const DetailScreen = ({navigation, route}: any) => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:9000/api/v1/coffee/${id}`,
+          `https://bbc-cafe-backend.vercel.app/api/v1/coffee/${id}`,
           {
             method: 'GET',
           },
@@ -78,7 +79,22 @@ const DetailScreen = ({navigation, route}: any) => {
         flex: 1,
       }}>
       {loading ? (
-        <Text>Loading....</Text>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <LottieView
+            source={require('../../assets/lottie/laoding.json')}
+            autoPlay
+            loop
+            style={{
+              width: 250,
+              height: 250,
+            }}
+          />
+        </View>
       ) : (
         <>
           <ScrollView
@@ -234,10 +250,7 @@ const DetailScreen = ({navigation, route}: any) => {
               }}
             />
           </ScrollView>
-          <AddToCart
-            data={data}
-            quantity={quantity}
-          />
+          <AddToCart data={data} quantity={quantity} />
         </>
       )}
     </SafeAreaView>

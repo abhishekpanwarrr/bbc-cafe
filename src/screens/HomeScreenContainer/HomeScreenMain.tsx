@@ -16,23 +16,27 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faPlus, faStar} from '@fortawesome/free-solid-svg-icons';
 import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
 import {Coffee} from '../StoreScreens/AddCoffeeScreen';
+import LottieView from 'lottie-react-native';
 
 const HomeScreenMain = ({navigation}: any) => {
   const tabBarHeight = useBottomTabBarHeight();
   const [coffeeList, setCoffeeList] = useState<Array<Coffee>>([]);
-  
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getAllCoffee = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
-          'http://localhost:9000/api/v1/coffee/all',
+          'https://bbc-cafe-backend.vercel.app/api/v1/coffee/all',
           {
             method: 'GET',
           },
         );
         const data = await response.json();
         setCoffeeList(data);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         Alert.alert('Something went wrong. Please try again later');
       }
     };
@@ -70,7 +74,24 @@ const HomeScreenMain = ({navigation}: any) => {
             }}>
             Coffee
           </Text>
-          {coffeeList.length <= 0 ? (
+          {loading ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <LottieView
+                source={require('../../assets/lottie/laoding.json')}
+                autoPlay
+                loop
+                style={{
+                  width: 250,
+                  height: 250,
+                }}
+              />
+            </View>
+          ) : coffeeList.length <= 0 ? (
             <Text style={{color: '#000'}}>No coffee found</Text>
           ) : (
             <FlatList
@@ -168,7 +189,24 @@ const HomeScreenMain = ({navigation}: any) => {
             }}>
             Beans
           </Text>
-          {coffeeList.length <= 0 ? (
+          {loading ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <LottieView
+                source={require('../../assets/lottie/laoding.json')}
+                autoPlay
+                loop
+                style={{
+                  width: 250,
+                  height: 250,
+                }}
+              />
+            </View>
+          ) : coffeeList.length <= 0 ? (
             <Text style={{color: '#000'}}>No beans found</Text>
           ) : (
             <FlatList
