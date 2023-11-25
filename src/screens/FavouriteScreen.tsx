@@ -59,7 +59,6 @@ const FavouriteScreen = () => {
     console.log('onLeftAction', rowKey);
   };
   const favourite = useSelector((state: RootState) => state.cart.favourite)
-  console.log("favourite", favourite);
 
   useEffect(() => {
     if (favourite) {

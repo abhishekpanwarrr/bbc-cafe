@@ -12,7 +12,6 @@ export interface User {
 
 export interface AuthProps {
     setAction: Dispatch<SetStateAction<string>>;
-    setIsUser?: Dispatch<SetStateAction<boolean>>
 }
 
 const initialUser: User = {
