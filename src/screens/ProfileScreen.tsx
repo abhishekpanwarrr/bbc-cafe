@@ -12,7 +12,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useEffect, useState} from 'react';
-import {View, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  Appearance,
+  Alert,
+} from 'react-native';
 import {
   Avatar,
   Title,
@@ -35,9 +42,18 @@ const ProfileScreen = ({navigation}: any) => {
       dispatch(logout());
     } catch (e) {}
   };
+  const [theme, setTheme] = useState<string | null | undefined>(null);
 
+  useEffect(() => {
+    const colorScheme = Appearance.getColorScheme();
+    setTheme(colorScheme);
+  }, []);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {backgroundColor: theme === 'dark' ? '#333' : '#fff'},
+      ]}>
       <ScrollView
         style={{
           flex: 1,
@@ -180,9 +196,9 @@ const ProfileScreen = ({navigation}: any) => {
         ) : (
           <>
             {action ? (
-              <RegisterScreen setAction={setAction} />
+              <RegisterScreen theme={theme} setAction={setAction} />
             ) : (
-              <Login setAction={setAction} />
+              <Login theme={theme} setAction={setAction} />
             )}
           </>
         )}

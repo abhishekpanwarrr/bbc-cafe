@@ -97,13 +97,16 @@ const AddCoffeeScreen = () => {
           },
         );
         const data = await response.json();
+        console.log("Data", data);
+        
         if (data._id) {
           Alert.alert('Coffee added');
         }
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        Alert.alert('Something went wrong. Please try again later');
+        console.log("error",error);
+        Alert.alert(error.message);
       }
     } else {
       Alert.alert('Please fill all fields');
